@@ -29,6 +29,7 @@ camera cam;
 Vector3f initialPosition(0.0, 0.0, -1.0);
 bool fog = true;
 const float fogColor[4] = {0.0, 0.0, 0.0, 0.0};
+int view_mode = 1; //1=wire, 2=flat shade, 3=smooth shade
 
 
 int main(int argc, char** argv)
@@ -46,15 +47,15 @@ int main(int argc, char** argv)
 	glutSpecialFunc(specialKeyInput);
 #ifndef __APPLE__
 	glewExperimental = GL_TRUE;
-	glewInit(); 
+	glewInit();
 #endif
 	if (argc != 2) {
 		cerr << "Usage: modelViewer <meshfile.obj>" << endl;
 		exit(1);
 	}
-	setup(argv[1]); 
-	glutMainLoop(); 
-	return 0;  
+	setup(argv[1]);
+	glutMainLoop();
+	return 0;
 }
 
 
@@ -109,7 +110,7 @@ void resize(int w, int h)
 
 void keyInput(unsigned char key, int x, int y)
 {
-	switch(key) 
+	switch(key)
 	{
 		case 'q': exit(0);            break; // quit
 		case 'w': obj.writeObjFile("output.obj"); break;
@@ -121,8 +122,7 @@ void keyInput(unsigned char key, int x, int y)
 		case 'Y': obj.yRotate(10.0);  break;
 		case 'r': obj.zRotate(-10.0); break;
 		case 'R': obj.zRotate(10.0);  break;
-		case 'f': fog = false;        break; // toggle fog off
-		case 'F': fog = true;         break; // toggle fog on
+		case 's': view_mode = (view_mode < 3) ? view_mode+1 : 1; break;
 		case 'x': // reset
 			obj.reset();
 			cam.initialize(persp, -0.1, 0.1, -0.1, 0.1, 0.1, 100.0);
@@ -138,7 +138,7 @@ void keyInput(unsigned char key, int x, int y)
 
 void specialKeyInput(int key, int x, int y)
 {
-	switch(key) 
+	switch(key)
 	{
 		case GLUT_KEY_LEFT:  obj.xTransl(-0.1); break;
 		case GLUT_KEY_RIGHT: obj.xTransl(0.1);  break;
@@ -148,5 +148,3 @@ void specialKeyInput(int key, int x, int y)
 	}
 	glutPostRedisplay();
 }
-
-

@@ -121,8 +121,8 @@ struct camera
 	{
 		switch (key)
 		{
-			case 'v': type = ortho;           break; // toggle camera type
-			case 'V': type = persp;           break;
+			// case 'v': type = ortho;           break; // toggle camera type
+			// case 'V': type = persp;           break;
 			case 'd': xTransl( MOVE_SPEED);   break;
 			case 'D': xTransl(-MOVE_SPEED);   break;
 			case 'c': yTransl( MOVE_SPEED);   break;
