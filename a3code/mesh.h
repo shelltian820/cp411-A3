@@ -27,14 +27,14 @@ using namespace Eigen;
 
 struct mesh
 {
-	
+
 	vector< vector<unsigned int> > faceVertices; //list of 3 indices of vertices
 	vector<Vector3f> vertices; //vertex coordinates: vx, vy, vz
 
-	vector< vector<unsigned int> > faceTextures; //list of 3 indices of normals
+	vector< vector<unsigned int> > faceTextures; //relative position on bitmap of face texture
 	vector <Vector2f> textures; //texture coordinates: tx, ty
 
-	vector< vector<unsigned int> > faceNormals; //list of 3 indices of textures
+	vector< vector<unsigned int> > faceNormals; //coordinate of face normal
 	vector <Vector3f> normals; //normal vectors: nx, ny, nz
 
 	// properties
@@ -54,6 +54,12 @@ struct mesh
 	unsigned int* triangleIndices; // array[3*numTriangles]
 	float* diameters; // array[numTriangles]
 	unsigned int vaoId[1];
+
+	//normals array
+	//numNormals == numVertices
+	float* normalArray; //array[3*numFaces] //NOT numTriangles!
+
+
 
 	// constructor
 	mesh()

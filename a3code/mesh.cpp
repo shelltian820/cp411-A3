@@ -33,11 +33,15 @@ void mesh::readObjFile(char* fileName)
 			vector<unsigned int> faceN;
 			unsigned int i;
 			while (stin >> i) {
+				//store v
 				faceV.push_back(i-1);
 				if (stin.get() == '/') {
-					//store t
-					stin >> i;
-					faceT.push_back(i-1);
+					//check if t exists
+					if (stin.peek() != '/') {
+						stin >> i;
+						faceT.push_back(i-1);
+					}
+
 					if (stin.get() == '/'){
 						//store n
 						stin >> i;
@@ -80,9 +84,9 @@ void mesh::writeObjFile(char* fileName)
 
 	//write vn //vn nx ny nz
 	for (unsigned int i = 0; i < normals.size(); ++i)
-		outfile << "v " << normals[i][0] << " " << normals[i][1] << " " << normals[i][2] << endl;
+		outfile << "vn " << normals[i][0] << " " << normals[i][1] << " " << normals[i][2] << endl;
 
-	//write f //f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3 
+	//write f //f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
 	for (unsigned int i = 0; i < faceVertices.size(); ++i) {
 		outfile << "f ";
 		for (unsigned int j = 0; j < faceVertices[i].size(); ++j) {
@@ -119,11 +123,14 @@ void mesh::glCreateDisplayList()
 {
 	displayList = glGenLists(1);
 	glNewList(displayList, GL_COMPILE);
-		for (unsigned int f = 0; f < faceVertices.size(); ++f) {
+		for (unsigned int f = 0; f < faceVertices.size(); ++f) { //for each face
 			glBegin(GL_TRIANGLE_FAN);
-				for (unsigned int j = 0; j < faceVertices[f].size(); ++j) {
-					unsigned int v(faceVertices[f][j]);
-					glVertex3fv(vertices[v].data()); 
+				for (unsigned int j = 0; j < faceVertices[f].size(); ++j) { //for each face vertex index
+					//DEFINE NORMAL BEFORE VERTEX
+					unsigned int n(faceNormals[f][j]); ///get vertex normal
+					glNormal3fv(normals[n].data()); //get normal
+					unsigned int v(faceVertices[f][j]); //get vertex index // same as: unsigned int v = faceVertices[f][j]
+					glVertex3fv(vertices[v].data()); //get coordinates
 				}
 			glEnd();
 		}
@@ -146,11 +153,15 @@ void mesh::createVertexArray()
 {
 	numVertices = vertices.size();
 	vertexArray = new float[3*numVertices];
+	// normalArray = new float[3*numVertices];
 
 	for (unsigned int v = 0; v < numVertices; ++v) {
 		vertexArray[3*v + 0] = vertices[v][0];
 		vertexArray[3*v + 1] = vertices[v][1];
 		vertexArray[3*v + 2] = vertices[v][2];
+		// normalArray[3*v + 0] = normals[v][0];
+		// normalArray[3*v + 1] = normals[v][1];
+		// normalArray[3*v + 2] = normals[v][2];
 	}
 
 	numTriangles = 0;
@@ -261,4 +272,3 @@ void mesh::glDrawVAO()
 #endif
 	glDrawVBO();
 }
-

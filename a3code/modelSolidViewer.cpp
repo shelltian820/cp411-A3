@@ -11,6 +11,7 @@
 
 #include "camera.h"
 #include "mesh.h"
+#include "light.h"
 
 using namespace Eigen;
 
@@ -29,7 +30,7 @@ camera cam;
 Vector3f initialPosition(0.0, 0.0, -1.0);
 bool fog = true;
 const float fogColor[4] = {0.0, 0.0, 0.0, 0.0};
-int view_mode = 1; //1=wire, 2=flat shade, 3=smooth shade
+int view_mode = 1; //1=wire, 2=flat shade, 3=smooth shade, 4=bitmap
 
 
 int main(int argc, char** argv)
@@ -63,11 +64,10 @@ void setup(char* fileName)
 {
 	obj.readObjFile(fileName);
 	obj.normalize();
-	obj.createVertexArray();
-	obj.glEnableVAO();
+	//obj.createVertexArray();  //called display list instead
+	//obj.glEnableVAO();
 	cam.initialize(persp, -0.1, 0.1, -0.1, 0.1, 0.1, 100.0);
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glEnable(GL_DEPTH_TEST);
+
 }
 
 
@@ -84,20 +84,12 @@ void drawScene(void)
 	cam.glPosition(); // camera transformation
 	obj.glPosition(initialPosition); // object transformation
 
-	if (fog) { // set fog
-		glEnable(GL_FOG);
-		glHint(GL_FOG_HINT, GL_NICEST);
-		glFogfv(GL_FOG_COLOR, fogColor);
-		glFogi(GL_FOG_MODE, GL_LINEAR);
-		glFogi(GL_FOG_START, 1.0);
-		glFogi(GL_FOG_END, 5.0);
-	} else
-		glDisable(GL_FOG);
-
+	shadeScene(view_mode);
 	// draw model
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	obj.glColor();
-	obj.glDrawVAO();
+	//obj.glDrawVAO(); //call displaylist instead
+	obj.glCreateDisplayList();
+	obj.glCallDisplayList();
 	glutSwapBuffers();
 }
 
@@ -122,7 +114,14 @@ void keyInput(unsigned char key, int x, int y)
 		case 'Y': obj.yRotate(10.0);  break;
 		case 'r': obj.zRotate(-10.0); break;
 		case 'R': obj.zRotate(10.0);  break;
-		case 's': view_mode = (view_mode < 3) ? view_mode+1 : 1; break;
+		case 's':
+			cout << "s" <<endl;
+			if (view_mode < 4) {
+				view_mode++;
+			} else {
+				view_mode = 1;
+			}
+			break;
 		case 'x': // reset
 			obj.reset();
 			cam.initialize(persp, -0.1, 0.1, -0.1, 0.1, 0.1, 100.0);
