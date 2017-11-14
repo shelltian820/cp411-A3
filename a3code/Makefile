@@ -6,7 +6,8 @@ ifeq ($(OS), Linux)
 endif
 
 ifeq ($(OS), Darwin)
-  FLAGS = -framework OpenGL -framework GLUT -I/opt/X11/include -I/usr/local/include -I/usr/local/include/eigen3 -L/opt/X11/lib -L/usr/local/lib -lGLEW -lGLUT -Wno-write-strings
+	FLAGS = -framework Cocoa -framework OpenGL -framework GLUT -I/usr/local/opt/glew/include -I/opt/X11/include -I/usr/local/include/eigen3 -L/usr/local/opt/glew/lib -L/opt/X11/lib -lGLEW -lGLUT -Wno-write-strings
+#  FLAGS = -framework OpenGL -framework GLUT -I/opt/X11/include -I/usr/local/include -I/usr/local/include/eigen3 -L/opt/X11/lib -L/usr/local/lib -lGLEW -lGLUT -Wno-write-strings
 endif
 
 
@@ -37,7 +38,7 @@ personViewer: personViewer.cpp light.h camera.h timer.h mesh.* texture.* skeleto
 
 
 %: %.cpp
-	g++ $*.cpp -o $* $(FLAGS)
+	g++ -std=c++11 $*.cpp -o $* $(FLAGS)
 
 
 clean:

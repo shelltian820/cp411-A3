@@ -131,10 +131,10 @@ void mesh::glCreateDisplayList()
 					glNormal3fv(normals[n].data()); //get normal
 
 					unsigned int t(faceTextures[f][j]); //get texture index
-					glTexCoord2f(textures[t].data());
+					glTexCoord2f(textures[t][0],textures[t][1]); //get texture coordinate
 
 					unsigned int v(faceVertices[f][j]); //get vertex index // same as: unsigned int v = faceVertices[f][j]
-					glVertex3fv(vertices[v].data()); //get coordinates
+					glVertex3fv(vertices[v].data()); //get vertex coordinate
 				}
 			glEnd();
 		}
