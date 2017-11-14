@@ -13,7 +13,7 @@ void shadeScene(int view_mode){
     //GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 }; //black
     GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 }; //white
     //GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+    GLfloat light_position[] = { 10.0, 10.0, 10.0, 0.0 };
 
     glClearColor(0.0, 0.0, 0.0, 0.0);
 

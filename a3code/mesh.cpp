@@ -126,9 +126,13 @@ void mesh::glCreateDisplayList()
 		for (unsigned int f = 0; f < faceVertices.size(); ++f) { //for each face
 			glBegin(GL_TRIANGLE_FAN);
 				for (unsigned int j = 0; j < faceVertices[f].size(); ++j) { //for each face vertex index
-					//DEFINE NORMAL BEFORE VERTEX
-					unsigned int n(faceNormals[f][j]); ///get vertex normal
+					//DEFINE NORMAL, THEN TEXTURE, THEN VERTEX
+					unsigned int n(faceNormals[f][j]); ///get normal index
 					glNormal3fv(normals[n].data()); //get normal
+
+					unsigned int t(faceTextures[f][j]); //get texture index
+					glTexCoord2f(textures[t].data());
+
 					unsigned int v(faceVertices[f][j]); //get vertex index // same as: unsigned int v = faceVertices[f][j]
 					glVertex3fv(vertices[v].data()); //get coordinates
 				}

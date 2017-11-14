@@ -1,17 +1,33 @@
 
 // modelViewer <mesh.obj>
 
-// CMPUT 411/511 Assignment 1 solution
+// modified CMPUT 411/511 Assignment 1 solution
+
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+//
+// #ifndef __APPLE__
+// #  include <GL/glew.h>
+// #endif
+// #include <GL/freeglut.h>
 
 
-#ifndef __APPLE__
+#ifdef __APPLE__
 #  include <GL/glew.h>
+#  include <GL/freeglut.h>
+#  include <OpenGL/glext.h>
+#else
+#  include <GL/glew.h>
+#  include <GL/freeglut.h>
+#  include <GL/glext.h>
+#pragma comment(lib, "glew32.lib")
 #endif
-#include <GL/freeglut.h>
 
 #include "camera.h"
 #include "mesh.h"
 #include "light.h"
+//#include "texture.cpp"
 
 using namespace Eigen;
 
@@ -31,7 +47,7 @@ Vector3f initialPosition(0.0, 0.0, -1.0);
 bool fog = true;
 const float fogColor[4] = {0.0, 0.0, 0.0, 0.0};
 int view_mode = 1; //1=wire, 2=flat shade, 3=smooth shade, 4=bitmap
-
+string bmpFileName = "../a3files/mesh/skin.bmp";
 
 int main(int argc, char** argv)
 {
@@ -81,10 +97,15 @@ void drawScene(void)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	//if (view_mode == 4) addTexture(bmpFileName); //add skin to model
+
+	shadeScene(view_mode); //must place light before model transformation
+
+
 	cam.glPosition(); // camera transformation
 	obj.glPosition(initialPosition); // object transformation
 
-	shadeScene(view_mode);
 	// draw model
 	obj.glColor();
 	//obj.glDrawVAO(); //call displaylist instead
@@ -105,7 +126,11 @@ void keyInput(unsigned char key, int x, int y)
 	switch(key)
 	{
 		case 'q': exit(0);            break; // quit
-		case 'w': obj.writeObjFile("output.obj"); break;
+		case 'w':
+			obj.writeObjFile("meshout.obj");
+			//write skeletonout.bvh
+			//write attachout.att
+			break;
 		case 'n': obj.zTransl(-0.1);  break;
 		case 'N': obj.zTransl(0.1);   break;
 		case 'p': obj.xRotate(-10.0); break;
