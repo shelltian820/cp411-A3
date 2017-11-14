@@ -157,15 +157,11 @@ void mesh::createVertexArray()
 {
 	numVertices = vertices.size();
 	vertexArray = new float[3*numVertices];
-	// normalArray = new float[3*numVertices];
 
 	for (unsigned int v = 0; v < numVertices; ++v) {
 		vertexArray[3*v + 0] = vertices[v][0];
 		vertexArray[3*v + 1] = vertices[v][1];
 		vertexArray[3*v + 2] = vertices[v][2];
-		// normalArray[3*v + 0] = normals[v][0];
-		// normalArray[3*v + 1] = normals[v][1];
-		// normalArray[3*v + 2] = normals[v][2];
 	}
 
 	numTriangles = 0;

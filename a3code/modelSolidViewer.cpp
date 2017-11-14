@@ -27,7 +27,7 @@
 #include "camera.h"
 #include "mesh.h"
 #include "light.h"
-//#include "texture.cpp"
+#include "texture.cpp"
 
 using namespace Eigen;
 
@@ -98,7 +98,7 @@ void drawScene(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	//if (view_mode == 4) addTexture(bmpFileName); //add skin to model
+	if (view_mode == 4) addTexture(bmpFileName); //add skin to model
 
 	shadeScene(view_mode); //must place light before model transformation
 
