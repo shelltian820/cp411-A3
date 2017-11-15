@@ -1,7 +1,6 @@
 #ifndef GETBMP_H
 #define GETBMP_H
 
-
 using namespace std;
 
 struct BitMapFile
@@ -14,8 +13,3 @@ struct BitMapFile
 BitMapFile *getbmp(string filename);
 
 #endif
-
-
-void loadTexture();
-void addTexture();
-BitMapFile *getbmp(string filename);
