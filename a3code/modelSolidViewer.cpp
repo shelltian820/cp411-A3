@@ -296,7 +296,7 @@ void addTexture(string bmpFileName){
   loadTexture(bmpFileName);
 
   // Specify how texture values combine with current surface color values.
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
   // Turn on OpenGL texturing.
   glEnable(GL_TEXTURE_2D);
