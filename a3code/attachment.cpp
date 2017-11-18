@@ -75,6 +75,7 @@ void attachment::glDrawMeshAttach(bool highlightMode, int highlightBone)
 			}
 		glEnd();
 	}
+	cout << "done reading attachments" << endl;
 }
 
 
@@ -174,7 +175,7 @@ void attachment::distancesVisibility(float* boneRadii)
 				dot2 = p2[0]*delta[0] + p2[1]*delta[1] + p2[2]*delta[2];
 				dot3 = p3[0]*delta[0] + p3[1]*delta[1] + p3[2]*delta[2];
 
-				if ( (dot1 <= 0 && dot2 <= 0 && dot3 <= 0) || 
+				if ( (dot1 <= 0 && dot2 <= 0 && dot3 <= 0) ||
 				     (dot1 >= d_sq && dot2 >= d_sq && dot3 >= d_sq) ) continue;
 				     // triangle entirely behind or beyond delta segment
 
@@ -194,7 +195,7 @@ void attachment::distancesVisibility(float* boneRadii)
 				d0 =  a00*dvec0[0] + a10*dvec0[1] + a20*dvec0[2];
 				d1 =  a02*dvec0[0] + a12*dvec0[1] + a22*dvec0[2];
 
-				if ( (d1>=-TOL && (d0<=TOL||d1>=d0-TOL)) || 
+				if ( (d1>=-TOL && (d0<=TOL||d1>=d0-TOL)) ||
 				     (d1<=TOL && (d0>=-TOL||d1<=d0+TOL)) ) continue; // beta failed
 
 				dvec1[0] = a10*a22 - a12*a20;
@@ -202,17 +203,17 @@ void attachment::distancesVisibility(float* boneRadii)
 				dvec1[2] = a00*a12 - a02*a10;
 				d2 =  delta[0]*dvec1[0] + delta[1]*dvec1[1] + delta[2]*dvec1[2];
 
-				if ( (d2>=-TOL && (d0<=TOL||d2>=d0-TOL)) || 
+				if ( (d2>=-TOL && (d0<=TOL||d2>=d0-TOL)) ||
 				     (d2<=TOL && (d0>=-TOL||d2<=d0+TOL)) || // gamma failed
 				     ((d1 + d2)/d0 >= 1-TOL) ) continue; // beta+gamma failed
 
 				d3 = -a01*dvec1[0] - a11*dvec1[1] - a21*dvec1[2];
 
-				if ( (d3>=-TOL && (d0<=TOL||d3>=d0-TOL)) || 
+				if ( (d3>=-TOL && (d0<=TOL||d3>=d0-TOL)) ||
 				     (d3<=TOL && (d0>=-TOL||d3<=d0+TOL)) ) continue; // lambda failed
 
 				// otherwise, found an occluding face
-				visible = false; 
+				visible = false;
 				break;
 			}
 
@@ -445,6 +446,7 @@ void attachment::writeMatrixXfSparse(MatrixXf* M, char* fileName)
 		}
 		outfile << endl;
 	}
+	cout << "done writing attachments" << endl;
 }
 
 

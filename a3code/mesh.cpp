@@ -63,7 +63,7 @@ void mesh::readObjFile(char* fileName)
 		}
 	}
 	infile.close();
-	cout << "done reading\n";
+	cout << "done reading obj\n";
 }
 
 
@@ -96,7 +96,7 @@ void mesh::writeObjFile(char* fileName)
 		outfile << endl;
 	}
 	outfile.close();
-	cout << "done writing\n";
+	cout << "done writing obj\n";
 }
 
 

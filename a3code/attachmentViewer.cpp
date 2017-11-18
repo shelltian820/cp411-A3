@@ -98,7 +98,7 @@ void drawScene(void)
 	// camera view volume
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	cam.glVolume(); 
+	cam.glVolume();
 
 	// camera position
 	glMatrixMode(GL_MODELVIEW);
@@ -124,11 +124,11 @@ void resize(int w, int h)
 
 void keyInput(unsigned char key, int x, int y)
 {
-	switch(key) 
+	switch(key)
 	{
 		case 'q': exit(0); break; // quit
 		case 'w': //write
-			obj.writeObjFile("output2.obj"); 
+			obj.writeObjFile("output2.obj");
 			skel.writeBvhSkeleton("output2.bvh");
 			att.writeMatrixXi(att.V, "V2.out");
 			att.writeMatrixXfSparse(att.W, "W2.out");
@@ -153,4 +153,3 @@ void keyInput(unsigned char key, int x, int y)
 
 	glutPostRedisplay();
 }
-

@@ -36,7 +36,7 @@ void motion::readBvhMotion(char* fileName, skeleton skel)
 
 	for (unsigned int i = 0; i < numFrames; ++i) { // read motion data
 		if (!getline(infile, line)) {
-			cerr << "Error: not enough motion lines to match frame count: " 
+			cerr << "Error: not enough motion lines to match frame count: "
 					 << numFrames << endl;
 			exit(1);
 		}
@@ -45,7 +45,7 @@ void motion::readBvhMotion(char* fileName, skeleton skel)
 		float channelDatum;
 		for (unsigned int j = 0; j < skel.channels.size(); ++j) {
 			if (!(stin >> channelDatum)) {
-				cerr << "Error: not enough motion data in line " << i << 
+				cerr << "Error: not enough motion data in line " << i <<
 				        " to match channel count: " << skel.channels.size() << endl;
 				exit(1);
 			}
@@ -53,6 +53,7 @@ void motion::readBvhMotion(char* fileName, skeleton skel)
 		}
 		sequence.push_back(channelData);
 	}
+	cout << "done reading bvh motion" << endl;
 }
 
 
@@ -89,10 +90,10 @@ void motion::writeBvhMotion(char* fileName)
 	outfile << "Frames: " << sequence.size() << endl;
 	outfile << "Frame Time: " << defaultGapTime << endl;
 	for (unsigned int i = 0; i < sequence.size(); ++i) {
-		for (unsigned int j = 0; j < sequence[i].size(); ++j) 
+		for (unsigned int j = 0; j < sequence[i].size(); ++j)
 			outfile << sequence[i][j] << " ";
 		outfile << endl;
 	}
 	outfile.close();
+	cout << "done writing bvh motion" << endl;
 }
-

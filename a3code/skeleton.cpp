@@ -24,6 +24,7 @@ void skeleton::readBvhSkeleton(char* fileName)
 		cerr << "Error: failed to read joint hierarchy" << endl;
 		exit(1);
 	}
+	cout << "done reading bvh skeleton" << endl;
 }
 
 
@@ -136,10 +137,11 @@ void skeleton::writeBvhSkeleton(char* fileName)
 	outfile << "HIERARCHY" << endl;
 	output_SubTree(outfile, root, 0);
 	outfile.close();
+	cout << "done writing bvh skeleton" << endl;
 }
 
 
-void skeleton::output_SubTree(ofstream& outfile, joint* current, 
+void skeleton::output_SubTree(ofstream& outfile, joint* current,
                               unsigned int depth)
 {
 	string indent(2*depth,' ');
@@ -281,7 +283,7 @@ void skeleton::glDraw_SubTree(joint* current)
 
 	float w = max((float)-1, min((float)1, current->quaternion.w())); // |w|<=1
 	float angle = 2*acos(w)*RAD2DEG_SKE;
-	glRotatef(angle, current->quaternion.x(), current->quaternion.y(), 
+	glRotatef(angle, current->quaternion.x(), current->quaternion.y(),
 	          current->quaternion.z());
 
 	for (unsigned int c = 0; c < current->children.size(); ++c)
@@ -351,7 +353,7 @@ void skeleton::createVertexArray()
 	vertexArray = new float[3*numVertices];
 
 	for (unsigned int b = 0; b < bones.size(); ++b) {
-		unsigned int v0(bones[b][0]); 
+		unsigned int v0(bones[b][0]);
 		unsigned int v1(bones[b][1]);
 		unsigned int i(6*b);
 		vertexArray[i + 0] = vertices[v0][0];
@@ -483,4 +485,3 @@ void skeleton::glUpdateVAO()
 #endif
 	glUpdateVBO();
 }
-
