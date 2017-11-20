@@ -267,31 +267,6 @@ Quaternionf skeleton::quaternionFromEulers(Vector3f rotations,
 }
 
 
-void skeleton::glDraw_SubTree(joint* current)
-{
-	glPushMatrix();
-
-	if (current->type == rootJoint)
-		glTranslatef(current->transl(0), current->transl(1), current->transl(2));
-
-	glBegin(GL_LINES);
-		glVertex3f(0.0, 0.0, 0.0);
-		glVertex3f(current->offset(0), current->offset(1), current->offset(2));
-	glEnd();
-
-	glTranslatef(current->offset(0), current->offset(1), current->offset(2));
-
-	float w = max((float)-1, min((float)1, current->quaternion.w())); // |w|<=1
-	float angle = 2*acos(w)*RAD2DEG_SKE;
-	glRotatef(angle, current->quaternion.x(), current->quaternion.y(),
-	          current->quaternion.z());
-
-	for (unsigned int c = 0; c < current->children.size(); ++c)
-		glDraw_SubTree(current->children[c]);
-
-	glPopMatrix();
-}
-
 
 void skeleton::recoverBones()
 {
@@ -485,3 +460,101 @@ void skeleton::glUpdateVAO()
 #endif
 	glUpdateVBO();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void skeleton::glDrawSubTreeSkel(joint* current)
+{
+	glPushMatrix();
+
+	if (current->type == rootJoint)
+		glTranslatef(current->transl(0), current->transl(1), current->transl(2));
+
+	glBegin(GL_LINES);
+		//draw bone
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(current->offset(0), current->offset(1), current->offset(2));
+	glEnd();
+
+	glTranslatef(current->offset(0), current->offset(1), current->offset(2));
+
+	float w = max((float)-1, min((float)1, current->quaternion.w())); // |w|<=1
+	float angle = 2*acos(w)*RAD2DEG_SKE;
+	glRotatef(angle, current->quaternion.x(), current->quaternion.y(),
+	          current->quaternion.z());
+
+	for (unsigned int c = 0; c < current->children.size(); ++c)
+		glDrawSubTreeSkel(current->children[c]);
+
+	glPopMatrix();
+}
+
+
+
+
+void skeleton::glDrawSubTreeMesh(joint* current, MatrixXf* W, vector<Vector3f> meshVertices,vector<Vector3f> meshNormals, vector<Vector2f> meshTextures )
+{
+	glPushMatrix();
+
+	if (current->type == rootJoint)
+		glTranslatef(current->transl(0), current->transl(1), current->transl(2));
+
+	glBegin(GL_TRIANGLES);
+		//draw vertices attached to the bone
+		for (int v=0; v<W->rows(); v++){
+			if(current->id < W->cols()){
+				if((*W)(v, current->id) > 0){
+					glNormal3fv(meshNormals[v].data());
+					glTexCoord2fv(meshTextures[v].data());
+					glVertex3fv(meshVertices[v].data());
+				}
+			}
+		}
+	glEnd();
+
+	glTranslatef(current->offset(0), current->offset(1), current->offset(2));
+
+	float w = max((float)-1, min((float)1, current->quaternion.w())); // |w|<=1
+	float angle = 2*acos(w)*RAD2DEG_SKE;
+	glRotatef(angle, current->quaternion.x(), current->quaternion.y(),
+	          current->quaternion.z());
+
+	for (unsigned int c = 0; c < current->children.size(); ++c)
+		glDrawSubTreeMesh(current->children[c], W, meshVertices, meshNormals, meshTextures);
+
+	glPopMatrix();
+}
+
+void glDrawFrame()
+{
+	//compile subTree(t)
+	//glbegin
+		//draw vertices in tree
+	//glend
+}
+
+// void compileSubtree(joint* joint, int t, vector<Vector3f> vertices, MatrixXf* W){
+// 	for(int i=0; i<vertices.size()){
+// 		if(current->id < W->cols()){
+// 			int j = joint->id;
+// 			if((*W)(i,j) > 0){
+// 				timeVertices[t][v] += (*W)(i,j) * joint.transl;
+// 			}
+// 		}
+// 	}
+// }

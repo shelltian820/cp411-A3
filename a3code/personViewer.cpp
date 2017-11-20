@@ -124,6 +124,7 @@ void setup(char* objFile, char* motionFile, char* attachFile)
 	tim.initialize(true, mot.sequence.size(), mot.defaultGapTime);
 	// camera
 	cam.initialize(persp, -0.1, 0.1, -0.1, 0.1, 0.1, 200.0);
+  cam.transl[2] = -1.0;
 	cam.positionMotion(mot.range, skel.radius);
 	// camera view volume
 	glMatrixMode(GL_PROJECTION);
@@ -134,6 +135,8 @@ void setup(char* objFile, char* motionFile, char* attachFile)
   //do something with attach file
   att.distancesVisibility(boneRadii);
 	att.readW(attachFile);
+  cout << "done reading attachments" << endl;
+
 
 
   glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -144,33 +147,26 @@ void drawScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	cam.glVolume(); // camera view volume
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+  cam.glPosition(); // camera transformation
 
 	if (view_mode == 4){
-		addTexture(bmpFileName);//add skin to model
+    addTexture(bmpFileName);//add skin to model
 	} else {
 		removeTexture();
 	}
 	shadeScene(view_mode); //must place light before model transformation
 
-
-	cam.glPosition(); // camera transformation
-	obj.glPosition(initialPosition); // object transformation
-
-	// draw model
-	obj.glColor();
-	//obj.glDrawVAO(); //call displaylist instead
-	obj.glCreateDisplayList();
-	obj.glCallDisplayList();
-  //draw skeleton
-  skel.glColor();
+  //draw skeleton & mesh
+  // skel.glColor();
 	skel.interpolatePose(&mot, tim.loopFrac, interpolate);
-	skel.glDraw();
+	skel.glDraw(att.W, obj.vertices, obj.normals, obj.textures);
+
+  //draw mesh
+  // obj.glColor();
+	// obj.glCreateDisplayList(); //instead of obj.glDrawVAO();
+	// obj.glCallDisplayList();
 
 	glutSwapBuffers();
 }
@@ -213,15 +209,15 @@ void keyInput(unsigned char key, int x, int y)
 
 void specialKeyInput(int key, int x, int y)
 {
-	switch(key)
-	{
-		case GLUT_KEY_LEFT:  obj.xTransl(-0.1); break;
-		case GLUT_KEY_RIGHT: obj.xTransl(0.1);  break;
-		case GLUT_KEY_DOWN:  obj.yTransl(-0.1); break;
-		case GLUT_KEY_UP:    obj.yTransl(0.1);  break;
-		default: break;
-	}
-	glutPostRedisplay();
+	// switch(key)
+	// {
+	// 	case GLUT_KEY_LEFT:  obj.xTransl(-0.1); break;
+	// 	case GLUT_KEY_RIGHT: obj.xTransl(0.1);  break;
+	// 	case GLUT_KEY_DOWN:  obj.yTransl(-0.1); break;
+	// 	case GLUT_KEY_UP:    obj.yTransl(0.1);  break;
+	// 	default: break;
+	// }
+	// glutPostRedisplay();
 }
 
 

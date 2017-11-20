@@ -1,7 +1,7 @@
 
 #include <iostream>
-#include <fstream> 
-#include <sstream> 
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <cmath>
@@ -46,7 +46,7 @@ struct joint
 	vector<string> channelNames;
 
 	// constructor
-	joint(string nm, jointType tp) 
+	joint(string nm, jointType tp)
 	{
 		name = nm;
 		type = tp;
@@ -69,11 +69,15 @@ struct skeleton
 	float radius;
 	vector<float*> channels, channelsB;
 	Vector3i translationIndices;
-	float color[4];
+	float skel_color[4], mesh_color[4];
 
 	// vertices and bones (used for vertex arrays)
 	vector<Vector3f> vertices;
 	vector<Vector2i> bones;
+
+	//frame info
+	vector<Vector3f> timeVertices; //3d position of vertex j at frame i
+	vector<Vector3f> timeNormals; //normal of vertex j at frame i
 
 	// vertex array
 	float* vertexArray;
@@ -83,8 +87,14 @@ struct skeleton
 	// constructor
 	skeleton()
 	{
-		color[1] = color[2] = 0.0;
-		color[0] = color[3] = 1.0;
+		// color[1] = color[2] = 0.0;
+		// color[0] = color[3] = 1.0;
+		skel_color[0] = 1.0, skel_color[1] = 0.0;
+		skel_color[2] = 0.0, skel_color[3] = 1.0;
+
+		mesh_color[0] = 1.0, mesh_color[1] = 1.0;
+		mesh_color[2] = 1.0, mesh_color[3] = 1.0;
+
 		vertexArray = NULL;
 		numVertices = 0;
 	}
@@ -105,9 +115,29 @@ struct skeleton
 	void interpolatePose_SubTree(joint*, float);
 	Quaternionf quaternionFromEulers(Vector3f, vector<string>);
 
-	void glColor() { glColor4fv(color); }
-	void glDraw() { glDraw_SubTree(root); }
-	void glDraw_SubTree(joint*);
+	void glColorSkel() { glColor4fv(skel_color); }
+	void glColorMesh() { glColor4fv(mesh_color); }
+
+
+
+
+
+	void glDraw(MatrixXf* W, vector<Vector3f> meshVertices, vector<Vector3f> meshNormals, vector<Vector2f> meshTextures) {
+		glColorSkel();
+		glDrawSubTreeSkel(root);
+		glColorMesh();
+		glDrawSubTreeMesh(root, W, meshVertices, meshNormals, meshTextures);
+	}
+
+	void glDrawSubTreeSkel(joint*);
+	void glDrawSubTreeMesh(joint*, MatrixXf*, vector<Vector3f>,vector<Vector3f>, vector<Vector2f>);
+	void compileSubtree();
+	void glDrawFrame();
+
+
+
+
+
 
 	// vertices and bones (used for vertex arrays)
 	void recoverBones();
@@ -136,4 +166,3 @@ struct skeleton
 };
 
 #endif
-

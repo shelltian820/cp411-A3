@@ -65,18 +65,19 @@ void attachment::glDrawMeshAttach(bool highlightMode, int highlightBone)
 		glBegin(GL_TRIANGLE_FAN);
 			for (unsigned int j = 0; j < objp->faceVertices[i].size(); ++j) {
 				unsigned int v = objp->faceVertices[i][j];
-				float val;
-				if (highlightMode)
-					val = (float)(*V)(v,highlightBone);
-				else
-					val = (*W)(v,highlightBone);
-				glColor3f(0.9*val+0.1, 0.9*val+0.1, 0.9*val+0.1);
+				// float val;
+				// if (highlightMode)
+				// 	val = (float)(*V)(v,highlightBone);
+				// else
+				// 	val = (*W)(v,highlightBone);
+				//glColor3f(0.9*val+0.1, 0.9*val+0.1, 0.9*val+0.1);
+				glColor3f(1.0,1.0,1.0);
 				glVertex3fv(objp->vertices[v].data());
 			}
 		glEnd();
 	}
-	cout << "done reading attachments" << endl;
 }
+
 
 
 /*********************************************/

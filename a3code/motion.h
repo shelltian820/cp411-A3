@@ -1,7 +1,7 @@
 
 #include <iostream>
-#include <fstream> 
-#include <sstream> 
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <cfloat>
@@ -26,6 +26,7 @@ struct motion
 	vector< vector<float> > sequence;
 	vector<Vector3f> range;
 	double defaultGapTime;
+	
 
 
 	// member functions
@@ -34,12 +35,11 @@ struct motion
 	vector<Vector3f> motionBounds(Vector3i);
 	void writeBvhMotion(char*);
 
-	void determineRange(Vector3i translationIndices) 
-	{ 
-		range = motionBounds(translationIndices); 
+	void determineRange(Vector3i translationIndices)
+	{
+		range = motionBounds(translationIndices);
 	}
 
 };
 
 #endif
-

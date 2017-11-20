@@ -39,14 +39,18 @@ struct attachment
 	mesh* objp;
 	skeleton* skelp;
 
-	MatrixXf* D; // These are the matrices defined in the lecture notes.
-	MatrixXi* V;
+	// These are the matrices defined in the lecture notes.
+	//i=vertex, j=bone
+	MatrixXf* D; //distance from vertex i to bone j
+	MatrixXi* V; //visibility
 	MatrixXf* S;
 	VectorXf* h;
 	MatrixXf* C;
 	SparseMatrix<int>* A;
 	SparseMatrix<int>* L;
-	MatrixXf* W;
+	MatrixXf* W; 	//attachment weight of vertex i to bone j
+	
+
 
 	// constructors
 	attachment() {}
